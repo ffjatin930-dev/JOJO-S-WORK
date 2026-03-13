@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Jojo GameStore</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+/* GLOSSY BACKGROUND */
+
+body{
+background: linear-gradient(135deg,#020202,#0a0f1c,#050505);
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at 20% 20%, rgba(0,255,255,0.15), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(0,150,255,0.15), transparent 40%);
+z-index:-1;
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:black;
+border-bottom:2px solid cyan;
+position:sticky;
+top:0;
+z-index:10;
+box-shadow:0 0 10px cyan;
+}
+
+.menu-btn{
+font-size:28px;
+cursor:pointer;
+color:cyan;
+}
+
+nav h1{
+color:cyan;
+}
+
+/* GLOSSY SEARCH */
+
+nav input{
+padding:8px 12px;
+border-radius:20px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.08);
+color:white;
+backdrop-filter:blur(10px);
+box-shadow:0 0 10px rgba(0,255,255,0.3);
+transition:0.3s;
+}
+
+nav input:focus{
+box-shadow:0 0 15px cyan;
+}
+
+/* CART ICON */
+
+.cart{
+cursor:pointer;
+font-size:22px;
+position:relative;
+}
+
+.cart span{
+position:absolute;
+top:-8px;
+right:-10px;
+background:red;
+color:white;
+font-size:12px;
+padding:2px 6px;
+border-radius:50%;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:0;
+left:-250px;
+width:250px;
+height:100%;
+background:black;
+padding-top:60px;
+transition:0.3s;
+z-index:20;
+}
+
+.sidebar a{
+display:block;
+padding:15px 25px;
+color:white;
+cursor:pointer;
+}
+
+.sidebar a:hover{
+background:#111;
+color:cyan;
+}
+
+.closeMenu{
+position:absolute;
+top:10px;
+right:15px;
+font-size:25px;
+cursor:pointer;
+}
+
+/* PRODUCTS */
+
+.products{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+padding:30px;
+}
+
+/* NEON PRODUCT CARD */
+
+.product{
+background:rgba(20,20,20,0.9);
+padding:15px;
+width:220px;
+border-radius:12px;
+text-align:center;
+cursor:pointer;
+transition:0.35s;
+position:relative;
+overflow:hidden;
+border:1px solid rgba(0,255,255,0.2);
+}
+
+.product:hover{
+transform:translateY(-10px) scale(1.05);
+box-shadow:
+0 0 10px cyan,
+0 0 20px cyan,
+0 0 40px rgba(0,255,255,0.4);
+}
+
+/* RGB BORDER */
+
+.product::before{
+content:"";
+position:absolute;
+top:-2px;
+left:-2px;
+right:-2px;
+bottom:-2px;
+background:linear-gradient(
+45deg,
+cyan,
+blue,
+purple,
+cyan
+);
+background-size:400%;
+z-index:-1;
+filter:blur(6px);
+animation:rgbBorder 6s linear infinite;
+}
+
+@keyframes rgbBorder{
+0%{background-position:0%}
+100%{background-position:400%}
+}
+
+.product img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.price{
+color:cyan;
+margin:5px 0;
+}
+
+.rating{
+color:gold;
+}
+
+/* RGB BUTTON */
+
+.buy{
+background:linear-gradient(45deg,cyan,#00c3ff);
+border:none;
+padding:8px 15px;
+border-radius:6px;
+cursor:pointer;
+color:black;
+font-weight:bold;
+}
+
+.buy:hover{
+box-shadow:0 0 10px cyan,0 0 20px cyan;
+}
+
+/* CART PANEL */
+
+.cartBox{
+position:fixed;
+right:-300px;
+top:0;
+width:300px;
+height:100%;
+background:black;
+padding:20px;
+transition:0.3s;
+overflow:auto;
+z-index:20;
+}
+
+.closeCart{
+font-size:25px;
+cursor:pointer;
+position:absolute;
+top:10px;
+right:15px;
+}
+
+.cartItem{
+border-bottom:1px solid #333;
+padding:10px 0;
+display:flex;
+justify-content:space-between;
+}
+
+.removeBtn{
+background:red;
+border:none;
+color:white;
+padding:3px 8px;
+cursor:pointer;
+border-radius:4px;
+}
+
+/* POPUP */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:30;
+}
+
+.popupContent{
+background:#111;
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.popupContent img{
+width:250px;
+margin-bottom:10px;
+}
+
+/* FOOTER */
+
+.site-footer{
+background:black;
+padding:60px 20px;
+margin-top:40px;
+border-top:1px solid #222;
+}
+
+.footer-logo{
+color:cyan;
+font-size:26px;
+margin-bottom:10px;
+}
+
+.footer-text{
+max-width:600px;
+line-height:1.6;
+color:#bbb;
+margin-bottom:20px;
+}
+
+.footer-row{
+display:flex;
+justify-content:space-between;
+border-bottom:1px solid #222;
+padding:15px 0;
+font-weight:bold;
+}
+
+.footer-bottom{
+text-align:center;
+margin-top:40px;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="sidebar" class="sidebar">
+
+<span class="closeMenu" onclick="toggleMenu()">❌</span>
+
+<a onclick="filter('all')">All Products</a>
+<a onclick="filter('mouse')">Mouse</a>
+<a onclick="filter('keyboard')">Keyboard</a>
+<a onclick="filter('headset')">Headset</a>
+<a onclick="filter('controller')">Controller</a>
+
+</div>
+
+<div id="cartBox" class="cartBox">
+
+<span class="closeCart" onclick="closeCart()">❌</span>
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+</div>
+
+<div id="popup" class="popup">
+<div class="popupContent" id="popupContent"></div>
+</div>
+
+<nav>
+
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+
+<h1>Jojo's Game store</h1>
+
+<input type="text" id="search" placeholder="Search products">
+
+<div class="cart" onclick="openCart()">
+🛒 <span id="cartCount">0</span>
+</div>
+
+</nav>
+
+<div class="products" id="products"></div>
+
+<script>
+
+let menuOpen=false;
+
+function toggleMenu(){
+
+const sidebar=document.getElementById("sidebar");
+
+if(menuOpen){
+sidebar.style.left="-250px";
+menuOpen=false;
+}else{
+sidebar.style.left="0";
+menuOpen=true;
+}
+
+}
+
+function openCart(){
+document.getElementById("cartBox").style.right="0";
+}
+
+function closeCart(){
+document.getElementById("cartBox").style.right="-300px";
+}
+
+const items=[
+
+{name:"Logitech G102 Gaming Mouse",price:999,category:"mouse",img:"https://m.media-amazon.com/images/I/61mpMH5TzkL.jpg"},
+{name:"Razer DeathAdder Mouse",price:1499,category:"mouse",img:"https://m.media-amazon.com/images/I/61LtuGzXeaL.jpg"},
+{name:"Redragon Mechanical Keyboard",price:2499,category:"keyboard",img:"https://m.media-amazon.com/images/I/71kr3WAj1FL.jpg"},
+{name:"Razer BlackWidow Keyboard",price:7999,category:"keyboard",img:"https://m.media-amazon.com/images/I/71R8JcJ4OUL.jpg"},
+{name:"HyperX Cloud Gaming Headset",price:3999,category:"headset",img:"https://m.media-amazon.com/images/I/61CGHv6kmWL.jpg"},
+{name:"Razer Kraken Headset",price:5999,category:"headset",img:"https://m.media-amazon.com/images/I/61kWB+uzR2L.jpg"},
+{name:"Xbox Wireless Controller",price:4999,category:"controller",img:"https://m.media-amazon.com/images/I/61CqYq+xwNL.jpg"},
+{name:"PS5 DualSense Controller",price:5999,category:"controller",img:"https://m.media-amazon.com/images/I/71FLoob3yRL.jpg"},
+{name:"RGB Gaming Mousepad",price:799,category:"mouse",img:"https://m.media-amazon.com/images/I/71vX7vH2ZRL.jpg"},
+{name:"Blue Yeti Microphone",price:9999,category:"other",img:"https://m.media-amazon.com/images/I/71K6hP6b-UL.jpg"}
+
+]
+
+let cart=[];
+
+function display(list){
+
+products.innerHTML="";
+
+list.forEach(p=>{
+
+products.innerHTML+=`
+
+<div class="product" onclick='preview(${JSON.stringify(p)})'>
+
+<img src="${p.img}">
+
+<h3>${p.name}</h3>
+
+<div class="rating">★★★★★</div>
+
+<p class="price">₹${p.price}</p>
+
+<button class="buy" onclick='event.stopPropagation();addCart(${JSON.stringify(p)})'>Buy</button>
+
+</div>
+
+`
+
+})
+
+}
+
+display(items)
+
+function addCart(p){
+
+cart.push(p)
+
+updateCart()
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1)
+
+updateCart()
+
+}
+
+function updateCart(){
+
+cartCount.innerText=cart.length
+
+cartItems.innerHTML=""
+
+cart.forEach((item,index)=>{
+
+cartItems.innerHTML+=`
+
+<div class="cartItem">
+
+${item.name}
+
+<button class="removeBtn" onclick="removeItem(${index})">❌</button>
+
+</div>
+
+`
+
+})
+
+}
+
+function filter(type){
+
+toggleMenu()
+
+if(type==="all") return display(items)
+
+display(items.filter(p=>p.category===type))
+
+}
+
+search.onkeyup=()=>{
+
+let v=search.value.toLowerCase()
+
+display(items.filter(p=>p.name.toLowerCase().includes(v)))
+
+}
+
+function preview(p){
+
+popup.style.display="flex"
+
+popupContent.innerHTML=`
+
+<img src="${p.img}">
+
+<h2>${p.name}</h2>
+
+<p>₹${p.price}</p>
+
+<button class="buy" onclick='addCart(${JSON.stringify(p)})'>Add to Cart</button>
+
+<br><br>
+
+<button onclick="popup.style.display='none'">Close</button>
+
+`
+
+}
+
+</script>
+
+<footer class="site-footer">
+
+<h2 class="footer-logo">JOJO GAMING STORE</h2>
+
+<p class="footer-text">
+Jojo Gaming Store offers high-quality gaming accessories including mice,
+keyboards, headsets and controllers designed for gamers who want the best
+performance and comfort.
+</p>
+
+<div class="footer-row">
+<span>SHOP CATEGORIES</span>
+<span>+</span>
+</div>
+
+<div class="footer-row">
+<span>SUPPORT</span>
+<span>+</span>
+</div>
+
+<div class="footer-row">
+<span>EXCLUSIVE OFFERS</span>
+<span>+</span>
+</div>
+
+<div class="footer-bottom">
+© 2026 Jojo Gaming Store. All rights reserved.
+</div>
+
+</footer>
+
+</body>
+</html>
